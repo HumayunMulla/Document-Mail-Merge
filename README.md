@@ -5,5 +5,6 @@ A program to mail merge by reading sender's address from an excel file along wit
 1. Python 2.7
 2. MS Office/Outlook
 3. pywin32 - https://pypi.org/project/pywin32/
+4. openpyxl - https://pypi.org/project/openpyxl/.
 
 Note: If a direct pip install pywin32 does not work then download the whl file from https://pypi.org/project/pywin32/#files and use the command - pip install 'path of the whl file'
