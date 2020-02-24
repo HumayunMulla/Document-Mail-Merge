@@ -2,7 +2,6 @@
 #   Program:    A program to mail merge by reading sender's address from an excel file along with the contents of the mail body. 
 #               It sends an email from outlook application. 
 #   Date:       02/21/2020
-
 import os
 import datetime
 import win32com.client as win32
@@ -36,7 +35,7 @@ total_rows = worksheet.nrows
 # variables used to send emails [receipient addesss, name, subject contents]
 receipient_email = []
 receipient_name = []
-receipient_body_part1 = []
+receipient_body_part1 = ""
 receipient_body_part2 = []
 
 for row_cursor in range(1,total_rows):
@@ -46,9 +45,21 @@ for row_cursor in range(1,total_rows):
     # Receipient Email Address
     receipient_email.append(worksheet.cell(row_cursor,3).value)
     # Receipient Body Part-1
-    receipient_body_part1.append(worksheet.cell(row_cursor,4).value)
+    receipient_body_part1 = worksheet.cell(row_cursor,4).value
     # Receipient Body Part-2
-    excel_data = worksheet.cell(row_cursor,1).value
+    col_index = 5 # customized details start from this location
+    while col_index < 16:
+        if col_index==5:
+            excel_data = worksheet.cell(row_cursor,5).value
+            if excel_data !="":
+                receipient_body_part2.append(excel_data)
+        else:                
+            excel_data = worksheet.cell(row_cursor,col_index).value
+            if excel_data!="":
+                receipient_body_part2[row_cursor-1] = str(receipient_body_part2[row_cursor-1]) + ", " + str(excel_data) # conversion into string required
+        col_index += 1
+    #print receipient_body_part2[row_cursor-1]
+    
     
 
 # printing just to check if correct values are populating 
@@ -58,10 +69,11 @@ for row_cursor in range(1,total_rows):
 i = 0
 sizeofList = len(receipient_email)
 while i < sizeofList:
-    print receipient_name[i] + " " + receipient_email[i] + " " + receipient_body_part1[i]
+    print receipient_name[i] + " " + receipient_email[i] + " " + receipient_body_part1 + " " + receipient_body_part2[i]
     i += 1
 
-print receipient_body_part1
+# print receipient_body_part1
+#print receipient_body_part2[0]
 
 
 # Get System Time and Date
