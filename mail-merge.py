@@ -6,6 +6,7 @@ import os
 import datetime
 import win32com.client as win32
 import xlrd
+import re
 
 # Certain details are abstracted and defined in config.ini file
 # Config Parser
@@ -40,17 +41,24 @@ def send_email(receipient_name, to_address, body_content1, body_content2):
     mail_sublist = ""
     sizeofList = len(body_detailed)
     while i < sizeofList:
-        mail_sublist += str(body_content1) + "\t" + body_detailed[i] + "\n"
+        # mail_sublist += str(body_content1) + "\t" + body_detailed[i] + "\n"
+        mail_sublist += str(body_content1) + ": \t\t" + body_detailed[i] + "<br>"
         i += 1
     # print mail_sublist
     # print receipient_name
     mail.To = to_address
     mail.Subject = mail_subject
     # print mail_subject
-    mail_body = "Hello " + receipient_name + ",\n"
-    mail_body = mail_body + "\n" + BodyText1 + "\n\n" + BodyText2 + "\n\n" + mail_sublist + "\n" + BodyText3 + "\n\n"BodyText4"\n\n" + Signature +"\n" + Designation
-    
-    mail.Body = mail_body
+    # mail_body = "Hello " + receipient_name + ",\n"
+    # mail_body = mail_body + "\n" + BodyText1 + "\n\n" + BodyText2 + "\n\n" + mail_sublist + "\n" + BodyText3 + "\n\n" + BodyText4 +"\n\n" + Signature +"\n" + Designation
+    attachment = mail.Attachments.Add("C:\source\Document-Mail-Merge\signature.png", 0x5, 0, "photo")
+    imageCid = "signature.png@123"
+    attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001E", imageCid)
+    # print mail_sublist
+    mail_body = '<html><body><p style="font: 14px arial, sans-serif;"> Hello '+ receipient_name + ',<br><br>' + BodyText1 + '<br><br>' + BodyText2 + '<br><br>'+ mail_sublist + '<br><br>' + BodyText3 + '<br><br>' + BodyText4 + '</p><p style="font: bold 14px calibri, sans-serif;">'+Signature+'&nbsp;<span style="font: normal 10px calibri, sans-serif;">'+ Designation +'</span><br><img src=\"cid:{0}\" alt="Campus Auditor" height=25 width=200></p></body></html>'.format(imageCid)
+    # mail.HTMLBody = '<html><body><p style="font: 14px arial, sans-serif;"> Hello '+ receipient_name + ',<br><br>' + BodyText1 + '<br><br>' + BodyText2 + '<br><br></p><textarea>' + mail_sublist + '</textarea></body></html>'
+    mail.HTMLBody = mail_body
+
     # print mail.Body
     mail.Send() # send email
     print "Successfully email sent!"
@@ -87,12 +95,18 @@ for row_cursor in range(1,total_rows):
     col_index = 5 # customized details start from this location
     while col_index < 15:
         if col_index==5:
-            excel_data = worksheet.cell(row_cursor,5).value
+            excel_data = str(worksheet.cell(row_cursor,5).value)
             if excel_data !="":
+                sep = '.'
+                excel_data = excel_data.split(sep, 1)[0]
+                #print excel_data
                 receipient_body_part2.append(excel_data)
         else:                
-            excel_data = worksheet.cell(row_cursor,col_index).value
+            excel_data = str(worksheet.cell(row_cursor,col_index).value)
             if excel_data!="":
+                sep = '.'
+                excel_data = excel_data.split(sep, 1)[0]
+                #print excel_data
                 receipient_body_part2[row_cursor-1] = str(receipient_body_part2[row_cursor-1]) + ", " + str(excel_data) # conversion into string required
         col_index += 1
     #print receipient_body_part2[row_cursor-1]
