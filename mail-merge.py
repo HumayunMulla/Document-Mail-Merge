@@ -8,13 +8,12 @@ import datetime
 import win32com.client as win32
 import xlrd
 
-print "This is working!"
+# print "This is working!"
 
 # Win32 API for Outlook Application
 outlook = win32.Dispatch('outlook.application')
 mail = outlook.CreateItem(0)
 
-receipients = []
 
 # Sending email function
 def send_email():  
@@ -28,19 +27,42 @@ def send_email():
 # send_email()   
 
 # Opening excel or *.xlsx file for reading recipient mail details
-book = xlrd.open_workbook("recipient_details.xls")
-sheet = book.sheet_by_index(0)
+workbook = xlrd.open_workbook('recipient_details.xls')
+worksheet = workbook.sheet_by_name('Sheet1')
+# find the total number of rows in the sheet
+total_rows = worksheet.nrows
+# print total_rows
 
-i = 1
-while i <= 2: 
-    for cell in sheet.row(i):
-        
-        receipients.append(cell.value)
-        #send_email()
-        #print cell.value
-    # empty the list 
+# variables used to send emails [receipient addesss, name, subject contents]
+receipient_email = []
+receipient_name = []
+receipient_body_part1 = []
+receipient_body_part2 = []
+
+for row_cursor in range(1,total_rows):
+    # excel_data = worksheet.cell(row_cursor,1).value
+    # Receipient Name
+    receipient_name.append(worksheet.cell(row_cursor,2).value)
+    # Receipient Email Address
+    receipient_email.append(worksheet.cell(row_cursor,3).value)
+    # Receipient Body Part-1
+    receipient_body_part1.append(worksheet.cell(row_cursor,4).value)
+    # Receipient Body Part-2
+    excel_data = worksheet.cell(row_cursor,1).value
     
-    i = i + 1
+
+# printing just to check if correct values are populating 
+# print receipient_name[0]
+# print receipient_email[0]
+# iterate using while loop and print the details
+i = 0
+sizeofList = len(receipient_email)
+while i < sizeofList:
+    print receipient_name[i] + " " + receipient_email[i] + " " + receipient_body_part1[i]
+    i += 1
+
+print receipient_body_part1
+
 
 # Get System Time and Date
 system_date = datetime.datetime.now().strftime('%d%m%Y'+"_"+'%H%M%S')
