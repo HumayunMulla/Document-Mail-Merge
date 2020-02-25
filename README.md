@@ -8,3 +8,16 @@ A program to mail merge by reading sender's address from an excel file along wit
 4. xlrd - https://pypi.org/project/xlrd/
 
 Note: If a direct pip install pywin32 does not work then download the whl file from https://pypi.org/project/pywin32/#files and use the command - pip install 'path of the whl file'
+
+# config.ini File
+[system]
+Subject=
+BodyText1 = 
+BodyText2 = 
+BodyText3A = 
+BodyText3B = 
+hyperlink = 
+hyperlinkName = 
+BodyText4 = 
+Signature = 
+** you can customize and change the details tailored to your need and requirement.
