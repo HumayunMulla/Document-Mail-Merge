@@ -6,7 +6,6 @@ import os
 import datetime
 import win32com.client as win32
 import xlrd
-import re
 
 # Certain details are abstracted and defined in config.ini file
 # Config Parser
@@ -28,7 +27,16 @@ Designation = config.get('system', 'Designation')
 
 # print "This is working!"
 
+# Get System Time and Date
+system_date = datetime.datetime.now().strftime('%d%m%Y'+"_"+'%H%M%S')
+# print system_date 
+# system_date variable is used later in the program for naming the file.
+fileOpen = open(system_date+".txt","w+")
 
+# Generate log for every email sent
+def generate_log(receipient_name, to_address):
+    timestamp = datetime.datetime.now().strftime('%d/%m/%Y'+" "+'%H:%M:%S')
+    fileOpen.write("Successfully email sent to " + receipient_name + " [" + to_address + "]" + " at " + timestamp + "\n")
 
 # Sending email function
 def send_email(receipient_name, to_address, body_content1, body_content2):  
@@ -36,7 +44,7 @@ def send_email(receipient_name, to_address, body_content1, body_content2):
     outlook = win32.Dispatch('outlook.application')
     mail = outlook.CreateItem(0)
     body_detailed = str(body_content2).split(', ')
-    print body_detailed
+    # print body_detailed
     i = 0
     mail_sublist = ""
     sizeofList = len(body_detailed)
@@ -62,6 +70,7 @@ def send_email(receipient_name, to_address, body_content1, body_content2):
     # print mail.Body
     mail.Send() # send email
     print "Successfully email sent!"
+    generate_log(receipient_name, to_address)
     
     
 
@@ -132,10 +141,7 @@ while i < sizeofList:
 #print receipient_body_part2[0]
 
 
-# Get System Time and Date
-system_date = datetime.datetime.now().strftime('%d%m%Y'+"_"+'%H%M%S')
-# print system_date 
-# system_date variable is used later in the program for naming the file.
 
-# Generate log for every email sent
+
+
 
