@@ -36,7 +36,7 @@ def send_email(receipient_name, to_address, body_content1, body_content2):
     outlook = win32.Dispatch('outlook.application')
     mail = outlook.CreateItem(0)
     body_detailed = str(body_content2).split(', ')
-    # print body_detailed
+    print body_detailed
     i = 0
     mail_sublist = ""
     sizeofList = len(body_detailed)
@@ -95,17 +95,21 @@ for row_cursor in range(1,total_rows):
     col_index = 5 # customized details start from this location
     while col_index < 15:
         if col_index==5:
-            excel_data = str(worksheet.cell(row_cursor,5).value)
+            excel_data = worksheet.cell(row_cursor,5).value
+            if isinstance(excel_data, float):
+                #print 'excel_data is a float!'
+                excel_data = int(excel_data)
+
             if excel_data !="":
-                sep = '.'
-                excel_data = excel_data.split(sep, 1)[0]
                 #print excel_data
                 receipient_body_part2.append(excel_data)
         else:                
-            excel_data = str(worksheet.cell(row_cursor,col_index).value)
-            if excel_data!="":
-                sep = '.'
-                excel_data = excel_data.split(sep, 1)[0]
+            excel_data = worksheet.cell(row_cursor,col_index).value
+            if isinstance(excel_data, float):
+                #print 'excel_data is a float!'
+                excel_data = int(excel_data)
+
+            if excel_data!="":                
                 #print excel_data
                 receipient_body_part2[row_cursor-1] = str(receipient_body_part2[row_cursor-1]) + ", " + str(excel_data) # conversion into string required
         col_index += 1
