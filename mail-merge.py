@@ -20,10 +20,13 @@ config.read('config.ini')
 mail_subject = config.get('system', 'Subject')
 BodyText1 = config.get('system', 'BodyText1')
 BodyText2 = config.get('system', 'BodyText2')
-BodyText3 = config.get('system', 'BodyText3')
+BodyText3A = config.get('system', 'BodyText3A')
+BodyText3B = config.get('system', 'BodyText3B')
+hyperlink = config.get('system', 'hyperlink')
+hyperlinkName = config.get('system', 'hyperlinkName')
 BodyText4 = config.get('system', 'BodyText4')
 Signature = config.get('system', 'Signature')
-Designation = config.get('system', 'Designation')
+Certification = config.get('system', 'Certification')
 
 # print "This is working!"
 
@@ -63,7 +66,7 @@ def send_email(receipient_name, to_address, body_content1, body_content2):
     imageCid = "signature.png@123"
     attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001E", imageCid)
     # print mail_sublist
-    mail_body = '<html><body><p style="font: 14px arial, sans-serif;"> Hello '+ receipient_name + ',<br><br>' + BodyText1 + '<br><br>' + BodyText2 + '<br><br>'+ mail_sublist + '<br><br>' + BodyText3 + '<br><br>' + BodyText4 + '</p><p style="font: bold 14px calibri, sans-serif;">'+Signature+'&nbsp;<span style="font: normal 10px calibri, sans-serif;">'+ Designation +'</span><br><img src=\"cid:{0}\" alt="Campus Auditor" height=25 width=200></p></body></html>'.format(imageCid)
+    mail_body = '<html><body><p style="font: 14px arial, sans-serif;"> Hello&nbsp;'+ receipient_name + ',<br><br>' + BodyText1 + '<br><br>' + BodyText2 + '<br><br>'+ mail_sublist + '<br><br>' + BodyText3A + '&nbsp;<a href="'+hyperlink+'">'+hyperlinkName +'</a>&nbsp;' + BodyText3B + '<br><br>' + BodyText4 + '</p><p style="font: bold 14px calibri, sans-serif;">'+Signature+'&nbsp;<span style="font: normal 10px calibri, sans-serif;">'+ Certification +'</span><br><img src=\"cid:{0}\" height=25 width=200></p></body></html>'.format(imageCid)
     # mail.HTMLBody = '<html><body><p style="font: 14px arial, sans-serif;"> Hello '+ receipient_name + ',<br><br>' + BodyText1 + '<br><br>' + BodyText2 + '<br><br></p><textarea>' + mail_sublist + '</textarea></body></html>'
     mail.HTMLBody = mail_body
 
