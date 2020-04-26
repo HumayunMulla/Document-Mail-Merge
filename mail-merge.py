@@ -80,6 +80,13 @@ def send_email(receipient_name, to_address, body_content1, body_content2):
 # calling the send email function
 # send_email()   
 
+# Opening excel or *.xlsx file for reading recipient mail details
+workbook = xlrd.open_workbook('recipient_details.xls')
+worksheet = workbook.sheet_by_name('Sheet1')
+# find the total number of rows in the sheet
+total_rows = worksheet.nrows
+# print total_rows
+
 from collections import defaultdict
 contact_dict = defaultdict(list)
 
