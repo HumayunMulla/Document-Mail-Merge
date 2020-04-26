@@ -93,6 +93,7 @@ receipient_name = []
 receipient_body_part1 = []
 receipient_body_part2 = []
 
+# excel upload
 for row_cursor in range(1,total_rows):
     # excel_data = worksheet.cell(row_cursor,1).value
     # Receipient Name
