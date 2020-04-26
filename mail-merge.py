@@ -87,22 +87,26 @@ worksheet = workbook.sheet_by_name('Sheet1')
 total_rows = worksheet.nrows
 # print total_rows
 
-# variables used to send emails [receipient addesss, name, subject contents]
-receipient_email = []
-receipient_name = []
-receipient_body_part1 = []
-receipient_body_part2 = []
+# dict
+# contact_dict = {}
+
+# from pandas import *
+# xls = ExcelFile('my_file.xls')
+# data = xls.parse(xls.sheet_names[0])
+# # print(data.to_dict())
+
+# print data['name']
+
+from collections import defaultdict
+contact_dict = defaultdict(list)
 
 # excel upload
 for row_cursor in range(1,total_rows):
-    # excel_data = worksheet.cell(row_cursor,1).value
-    # Receipient Name
-    receipient_name.append(worksheet.cell(row_cursor,2).value)
+    # Receipient Name is the Key 
     # Receipient Email Address
-    receipient_email.append(worksheet.cell(row_cursor,3).value)
+    contact_dict[worksheet.cell(row_cursor,2).value].append(worksheet.cell(row_cursor,3).value)
     # Receipient Body Part-1
-    # receipient_body_part1 = str(worksheet.cell(row_cursor,4).value)
-    receipient_body_part1.append(str(worksheet.cell(row_cursor,4).value))
+    contact_dict[worksheet.cell(row_cursor,2).value].append(worksheet.cell(row_cursor,4).value)
     
     # Receipient Body Part-2
     col_index = 5 # customized details start from this location
@@ -115,7 +119,8 @@ for row_cursor in range(1,total_rows):
 
             if excel_data !="":
                 #print excel_data
-                receipient_body_part2.append(excel_data)
+                # receipient_body_part2.append(excel_data)
+                contact_dict[worksheet.cell(row_cursor,2).value].append(excel_data)
         else:                
             excel_data = worksheet.cell(row_cursor,col_index).value
             if isinstance(excel_data, float):
@@ -124,28 +129,15 @@ for row_cursor in range(1,total_rows):
 
             if excel_data!="":                
                 #print excel_data
-                receipient_body_part2[row_cursor-1] = str(receipient_body_part2[row_cursor-1]) + ", " + str(excel_data) # conversion into string required
+                # receipient_body_part2[row_cursor-1] = str(receipient_body_part2[row_cursor-1]) + ", " + str(excel_data) # conversion into string required
+                contact_dict[worksheet.cell(row_cursor,2).value].append(excel_data)
+        
         col_index += 1
-    #print receipient_body_part2[row_cursor-1]
     
-    
+# print contact_dict
 
-# printing just to check if correct values are populating 
-# print receipient_name[0]
-# print receipient_email[0]
-# iterate using while loop and print the details
-i = 0
-sizeofList = len(receipient_email)
-while i < sizeofList:
-    send_email(receipient_name[i], receipient_email[i], receipient_body_part1[i], receipient_body_part2[i])
-
-    i += 1
-
-# print receipient_body_part1
-#print receipient_body_part2[0]
-
-
-
+for key, value in contact_dict.iteritems() :
+    send_email( key, value[0], value[1], value[2])
 
 
 
