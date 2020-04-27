@@ -87,16 +87,14 @@ worksheet = workbook.sheet_by_name('Sheet1')
 total_rows = worksheet.nrows
 # print total_rows
 
-from collections import defaultdict
-contact_dict = defaultdict(list)
-
+body_content2 = ""
 # excel upload
 for row_cursor in range(1,total_rows):
     # Receipient Name is the Key 
     # Receipient Email Address
-    contact_dict[worksheet.cell(row_cursor,2).value].append(worksheet.cell(row_cursor,3).value)
+    receipient_name = worksheet.cell(row_cursor,2).value
     # Receipient Body Part-1
-    contact_dict[worksheet.cell(row_cursor,2).value].append(worksheet.cell(row_cursor,4).value)
+    to_address = worksheet.cell(row_cursor,3).value
     
     # Receipient Body Part-2
     col_index = 5 # customized details start from this location
@@ -110,7 +108,7 @@ for row_cursor in range(1,total_rows):
             if excel_data !="":
                 #print excel_data
                 # receipient_body_part2.append(excel_data)
-                contact_dict[worksheet.cell(row_cursor,2).value].append(excel_data)
+                body_content1 = excel_data
         else:                
             excel_data = worksheet.cell(row_cursor,col_index).value
             if isinstance(excel_data, float):
@@ -119,15 +117,7 @@ for row_cursor in range(1,total_rows):
 
             if excel_data!="":                
                 #print excel_data
-                # receipient_body_part2[row_cursor-1] = str(receipient_body_part2[row_cursor-1]) + ", " + str(excel_data) # conversion into string required
-                contact_dict[worksheet.cell(row_cursor,2).value].append(excel_data)
-        
-        col_index += 1
+                body_content2 = body_content2 + ", " + str (excel_data)
+        col_index += 1 # 
     
-# print contact_dict
-
-for key, value in contact_dict.iteritems() :
-    send_email( key, value[0], value[1], value[2])
-
-
-
+    send_email(receipient_name, to_address, body_content1, body_content2)
