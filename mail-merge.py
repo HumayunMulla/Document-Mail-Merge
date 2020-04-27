@@ -2,6 +2,9 @@
 #   Program:    A program to mail merge by reading sender's address from an excel file along with the contents of the mail body. 
 #               It sends an email from outlook application. 
 #   Date:       02/21/2020
+#   Modified Date: 04/26/2020
+#   Modifations:   Removal of list & dictionary and instead directly composing the email from the excel sheet content
+
 import os
 import datetime
 import win32com.client as win32
